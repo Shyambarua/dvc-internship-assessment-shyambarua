@@ -22,6 +22,7 @@ All solutions are built using clean, well-structured code and responsive design 
 ---
 
 ## Repository Structure
+```
 dvc-internship-assessment-shyam/
 │
 ├── question1/
@@ -35,7 +36,7 @@ dvc-internship-assessment-shyam/
 │
 └── README.md
 
-
+```
 
 
 ---
@@ -62,8 +63,7 @@ dvc-internship-assessment-shyam/
 ### Time Spent
 Approx: 2–3 hours
 
-### Live Demo
-(Add link if deployed)
+
 
 ---
 
@@ -114,8 +114,7 @@ Approx: 3–4 hours
 ### Time Spent
 Approx: 3–4 hours
 
-### Live Demo
-(Add link if deployed)
+
 
 ---
 
