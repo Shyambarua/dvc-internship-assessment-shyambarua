@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Testimonials Manager (Debug Version)
+ * Plugin Name: Testimonials Manager 
  * Description: Diagnostic version with inline debugging and guaranteed CSS/JS loading
- * Version: 1.0.2
- * Author: Your Name
+ * Version: 1.0.0
+ * Author: Shyam Barua
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
