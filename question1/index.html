@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Responsive Product Card Component">
+    <title>Product Card - Technical Assessment</title>
+    <style>
+        /* 
+           CSS RESET & BASE STYLES
+         */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /*
+           PRODUCT CARD COMPONENT
+           Mobile-First Approach (< 768px)
+        */
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Product Image Section */
+        .product-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        /* Discount Badge */
+        .discount-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Product Details Section */
+        .product-details {
+            padding: 24px;
+        }
+
+        .product-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        /* Price Section */
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .current-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .original-price {
+            font-size: 18px;
+            color: #9ca3af;
+            text-decoration: line-through;
+        }
+
+        /* Product Description */
+        .product-description {
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* Quantity Selector Section */
+        .quantity-section {
+            margin-bottom: 20px;
+        }
+
+        .quantity-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+        }
+
+        .quantity-btn:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .quantity-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .quantity-display {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* Add to Cart Button */
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+        }
+
+        .add-to-cart-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .add-to-cart-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Success Message Notification */
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.4s ease;
+            z-index: 1000;
+            max-width: 320px;
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            font-size: 24px;
+        }
+
+        .success-text {
+            flex: 1;
+        }
+
+        .success-text strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .success-text small {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* 
+           TABLET BREAKPOINT (768px - 1023px)
+     */
+        @media (min-width: 768px) {
+            .product-card {
+                max-width: 450px;
+            }
+
+            .product-image-wrapper {
+                height: 320px;
+            }
+
+            .product-details {
+                padding: 28px;
+            }
+
+            .product-name {
+                font-size: 26px;
+            }
+
+            .product-description {
+                font-size: 16px;
+            }
+        }
+
+        /* 
+           DESKTOP BREAKPOINT (> 1024px)
+          */
+        @media (min-width: 1024px) {
+            .product-card {
+                max-width: 500px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                max-width: 900px;
+            }
+
+            .product-image-wrapper {
+                height: 100%;
+                min-height: 400px;
+            }
+
+            .product-details {
+                padding: 32px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .discount-badge {
+                top: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+        }
+
+        /*
+           ACCESSIBILITY & FOCUS STYLES
+          */
+        .quantity-btn:focus,
+        .add-to-cart-btn:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        /* Screen reader only text */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Product Card Component -->
+    <article class="product-card" role="region" aria-label="Product card">
+        <!-- Product Image Section -->
+        <div class="product-image-wrapper">
+            <img 
+                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80" 
+                alt="Premium wireless headphones in black color with soft cushions"
+                class="product-image"
+                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22400%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22%23999%22%3EProduct Image%3C/text%3E%3C/svg%3E'; this.onerror=null;"
+                loading="lazy"
+            />
+            <span class="discount-badge" aria-label="30% discount">-30% OFF</span>
+        </div>
+
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <div>
+                <h1 class="product-name">Premium Wireless Headphones</h1>
+                
+                <div class="product-price" aria-label="Price information">
+                    <span class="current-price" aria-label="Current price">$139.99</span>
+                    <span class="original-price" aria-label="Original price">$199.99</span>
+                </div>
+
+                <p class="product-description">
+                    Experience superior sound quality with active noise cancellation, 30-hour battery life, 
+                    and premium comfort. Perfect for music lovers and professionals alike.
+                </p>
+            </div>
+
+            <!-- Quantity Selector -->
+            <div class="quantity-section">
+                <label for="quantity" class="quantity-label">Quantity</label>
+                <div class="quantity-selector" role="group" aria-label="Quantity selector">
+                    <button 
+                        class="quantity-btn" 
+                        id="decrease-btn"
+                        aria-label="Decrease quantity"
+                        type="button"
+                    >−</button>
+                    <span 
+                        class="quantity-display" 
+                        id="quantity-display"
+                        role="status"
+                        aria-live="polite"
+                        aria-atomic="true"
+                    >1</span>
+                    <button 
+                        class="quantity-btn" 
+                        id="increase-btn"
+                        aria-label="Increase quantity"
+                        type="button"
+                    >+</button>
+                </div>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button 
+                class="add-to-cart-btn" 
+                id="add-to-cart-btn"
+                aria-label="Add to cart"
+                type="button"
+            >
+                Add to Cart
+            </button>
+        </div>
+    </article>
+
+    <!-- Success Message Notification -->
+    <div 
+        class="success-message" 
+        id="success-message"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+    >
+        <span class="success-icon" aria-hidden="true">✓</span>
+        <div class="success-text">
+            <strong>Added to Cart!</strong>
+            <small id="success-details"></small>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Product Card Component JavaScript
+         * Handles quantity selection and add to cart functionality
+         */
+
+        // Product data
+        const PRODUCT_DATA = {
+            name: 'Premium Wireless Headphones',
+            price: 139.99,
+            originalPrice: 199.99
+        };
+
+        // Configuration constants
+        const MIN_QUANTITY = 1;
+        const MAX_QUANTITY = 10;
+
+        // DOM element references
+        const decreaseBtn = document.getElementById('decrease-btn');
+        const increaseBtn = document.getElementById('increase-btn');
+        const quantityDisplay = document.getElementById('quantity-display');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const successMessage = document.getElementById('success-message');
+        const successDetails = document.getElementById('success-details');
+
+        // Current quantity state
+        let currentQuantity = MIN_QUANTITY;
+
+        /**
+         * Updates the quantity display and button states
+         */
+        function updateQuantityDisplay() {
+            quantityDisplay.textContent = currentQuantity;
+            
+            // Disable decrease button if at minimum
+            if (currentQuantity <= MIN_QUANTITY) {
+                decreaseBtn.disabled = true;
+                decreaseBtn.setAttribute('aria-disabled', 'true');
+            } else {
+                decreaseBtn.disabled = false;
+                decreaseBtn.setAttribute('aria-disabled', 'false');
+            }
+            
+            // Disable increase button if at maximum
+            if (currentQuantity >= MAX_QUANTITY) {
+                increaseBtn.disabled = true;
+                increaseBtn.setAttribute('aria-disabled', 'true');
+            } else {
+                increaseBtn.disabled = false;
+                increaseBtn.setAttribute('aria-disabled', 'false');
+            }
+        }
+
+        /**
+         * Decreases the quantity by 1
+         */
+        function decreaseQuantity() {
+            if (currentQuantity > MIN_QUANTITY) {
+                currentQuantity--;
+                updateQuantityDisplay();
+            }
+        }
+
+        /**
+         * Increases the quantity by 1
+         */
+        function increaseQuantity() {
+            if (currentQuantity < MAX_QUANTITY) {
+                currentQuantity++;
+                updateQuantityDisplay();
+            }
+        }
+
+        /**
+         * Calculates the total price based on current quantity
+      
+         */
+        function calculateTotal() {
+            return (PRODUCT_DATA.price * currentQuantity).toFixed(2);
+        }
+
+        /**
+         * Shows the success message notification
+        
+         */
+        function showSuccessMessage(message) {
+            successDetails.textContent = message;
+            successMessage.classList.add('show');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        /**
+         * Handles the add to cart action
+         */
+        function addToCart() {
+            const cartItem = {
+                productName: PRODUCT_DATA.name,
+                quantity: currentQuantity,
+                pricePerUnit: PRODUCT_DATA.price,
+                totalPrice: calculateTotal()
+            };
+
+            // Log cart item details to console
+            console.group('🛒 Cart Item Added');
+            console.log('Product Name:', cartItem.productName);
+            console.log('Quantity:', cartItem.quantity);
+            console.log('Price per Unit: $' + cartItem.pricePerUnit);
+            console.log('Total Price: $' + cartItem.totalPrice);
+            console.log('Timestamp:', new Date().toLocaleString());
+            console.groupEnd();
+
+            // Show success message
+            showSuccessMessage(`${currentQuantity} item${currentQuantity > 1 ? 's' : ''} - $${cartItem.totalPrice}`);
+
+            // Optional: Add animation to button
+            addToCartBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                addToCartBtn.style.transform = '';
+            }, 150);
+        }
+
+        // Event Listeners
+        decreaseBtn.addEventListener('click', decreaseQuantity);
+        increaseBtn.addEventListener('click', increaseQuantity);
+        addToCartBtn.addEventListener('click', addToCart);
+
+        // Keyboard support for quantity buttons
+        decreaseBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                decreaseQuantity();
+            }
+        });
+
+        increaseBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                increaseQuantity();
+            }
+        });
+
+        // Initialize the display
+        updateQuantityDisplay();
+
+        // Log initialization
+        console.log('✅ Product Card Component Initialized');
+        console.log('Min Quantity:', MIN_QUANTITY);
+        console.log('Max Quantity:', MAX_QUANTITY);
+    </script>
+</body>
+</html>
